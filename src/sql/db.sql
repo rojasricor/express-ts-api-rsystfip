@@ -32,11 +32,10 @@ CREATE TABLE `documents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Tabla que almacena los tipos de documentos, que seran utilizados para el agendamiento de personas.';
 
 INSERT INTO `documents` (`id`, `document`, `description`) VALUES
-(1, 'CC', 'Cédula Ciudadanía CC'),
-(2, 'TI', 'Tarjeta Identidad TI'),
-(3, 'CE', 'Cédula Extranjería CE'),
-(4, 'PA', 'Pasaporte PA'),
-(5, 'NIT', 'Número de identificación tributaria NIT');
+(1, 'CC', 'Cédula Ciudadanía'),
+(2, 'TI', 'Tarjeta Identidad'),
+(3, 'CE', 'Cédula Extranjería'),
+(4, 'PA', 'Pasaporte');
 
 CREATE TABLE `faculties` (
   `id` tinyint(1) UNSIGNED NOT NULL COMMENT 'Campo que guarda el id de la facultad, (autoincremental).',
@@ -44,9 +43,9 @@ CREATE TABLE `faculties` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Tabla que almacena las facultades actuales de los programas academicos del ITFIP.';
 
 INSERT INTO `faculties` (`id`, `facultie`) VALUES
-(1, 'Facultad de Economía, Administración y Contaduría Pública'),
-(2, 'Facultad de Ingeniería y Ciencias Agroindustriales'),
-(3, 'Facultad de Ciencias Sociales, Salud y Educación'),
+(1, 'Economía, Administración y Contaduría Pública'),
+(2, 'Ingeniería y Ciencias Agroindustriales'),
+(3, 'Ciencias Sociales, Salud y Educación'),
 (4, 'No aplica');
 
 CREATE TABLE `people` (
