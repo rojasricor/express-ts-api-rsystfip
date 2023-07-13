@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import Jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../config";
-import * as Security from "../helpers/bcrypt";
+import * as bcryptHelper from "../helpers/bcrypt.helper";
 import * as User from "../models/User";
-import { authSchema } from "../validation/joi";
+import { authSchema } from "../validation/schemas";
 
 export async function auth(req: Request, res: Response): Promise<Response> {
     const { error, value } = authSchema.validate(req.body);
@@ -15,7 +15,7 @@ export async function auth(req: Request, res: Response): Promise<Response> {
     );
     if (!userFound) return res.status(404).json({ error: "Bad credentials" });
 
-    const passwordVerified = await Security.verifyPassword(
+    const passwordVerified = await bcryptHelper.verifyPassword(
         value.password,
         userFound.password
     );

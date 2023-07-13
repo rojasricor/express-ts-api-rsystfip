@@ -8,6 +8,8 @@ export async function getCategories(
     const categories = await Resource.getCategories();
     if (!categories)
         return res.status(500).json({ error: "Error getting categories" });
+    if (categories.length === 0)
+        return res.status(404).json({ error: "No categories found" });
 
     return res.status(200).json(categories);
 }
@@ -19,6 +21,8 @@ export async function getDocuments(
     const documents = await Resource.getDocuments();
     if (!documents)
         return res.status(500).json({ error: "Error getting documents" });
+    if (documents.length === 0)
+        return res.status(404).json({ error: "No documents found" });
 
     return res.status(200).json(documents);
 }
@@ -30,6 +34,8 @@ export async function getFaculties(
     const faculties = await Resource.getFaculties();
     if (!faculties)
         return res.status(500).json({ error: "Error getting faculties" });
+    if (faculties.length === 0)
+        return res.status(404).json({ error: "No faculties found" });
 
     return res.status(200).json(faculties);
 }

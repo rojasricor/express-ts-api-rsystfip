@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import * as sgMail from "../helpers/sgMail";
+import * as sgHelper from "../helpers/sg.helper";
 import { IScheduleData } from "../interfaces/IScheduleData";
 import * as Schedule from "../models/Schedule";
-import { cancellSchema, scheduleSchema } from "../validation/joi";
+import { cancellSchema, scheduleSchema } from "../validation/schemas";
 
 export async function getSchedule(
     req: Request,
@@ -11,6 +11,8 @@ export async function getSchedule(
     const schedules = await Schedule.getSchedules();
     if (!schedules)
         return res.status(500).json({ error: "Error getting schedules" });
+    if (schedules.length === 0)
+        return res.status(404).json({ error: "No events found" });
 
     return res.status(200).json(schedules);
 }
@@ -60,7 +62,7 @@ export async function cancellSchedule(
     const msg = `<strong>${scheduleFound.name}</strong>, your schedule cite for the day <code>${scheduleFound.start_date} has been cancelled.
         The reason of cancellation is: <code>${value.cancelled_asunt}</code>.</br><img src='https://repositorio.itfip.edu.co/themes/Mirage2/images/logo_wh.png'>`;
 
-    const msgSended = await sgMail.sendEmail(
+    const msgSended = await sgHelper.sendEmail(
         scheduleFound.email as string,
         "Schedule cancelled",
         msg

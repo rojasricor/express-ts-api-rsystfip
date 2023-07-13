@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { IDean } from "../interfaces/IDean";
 import * as Dean from "../models/Dean";
-import { deanSchema } from "../validation/joi";
+import { deanSchema } from "../validation/schemas";
 
 export async function getDeans(req: Request, res: Response): Promise<Response> {
     const deans = await Dean.getDeans();
     if (!deans) return res.status(500).json({ error: "Error getting deans" });
+    if (deans.length === 0)
+        return res.status(404).json({ error: "No deans found" });
 
     return res.status(200).json(deans);
 }

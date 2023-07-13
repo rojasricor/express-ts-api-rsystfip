@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { IPeople } from "../interfaces/IPeople";
 import * as People from "../models/People";
-import { idSchema, peopleEditSchema, schedulerSchema } from "../validation/joi";
+import {
+    idSchema,
+    peopleEditSchema,
+    schedulerSchema,
+} from "../validation/schemas";
 
 export async function createPerson(
     req: Request,
@@ -81,6 +85,8 @@ export async function getPeople(
 ): Promise<Response> {
     const people = await People.getPeople();
     if (!people) return res.status(500).json({ error: "Error getting people" });
+    if (people.length === 0)
+        return res.status(404).json({ error: "No people found" });
 
     return res.status(200).json(people);
 }
@@ -94,6 +100,8 @@ export async function getCancelledPeople(
         return res
             .status(500)
             .json({ error: "Error getting cancelled people" });
+    if (peopleCancelled.length === 0)
+        return res.status(404).json({ error: "No people found" });
 
     return res.status(200).json(peopleCancelled);
 }

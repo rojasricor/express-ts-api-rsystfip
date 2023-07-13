@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import * as Security from "../helpers/bcrypt";
+import * as bcryptHelper from "../helpers/bcrypt.helper";
 import { IUser } from "../interfaces/IUser";
 import * as User from "../models/User";
-import { idSchema, userSchema } from "../validation/joi";
+import { idSchema, userSchema } from "../validation/schemas";
 
 export async function getUser(req: Request, res: Response): Promise<Response> {
     const { error, value } = idSchema.validate(req.params);
@@ -17,6 +17,8 @@ export async function getUser(req: Request, res: Response): Promise<Response> {
 export async function getUsers(req: Request, res: Response): Promise<Response> {
     const users = await User.getUsers();
     if (!users) return res.status(500).json({ error: "Error getting users" });
+    if (users.length === 0)
+        return res.status(404).json({ error: "No users found" });
 
     return res.status(200).json(users);
 }
@@ -58,7 +60,7 @@ export async function createUser(
             role: value.role,
             tel: value.tel,
             email: value.email,
-            password: await Security.encryptPassword(value.password),
+            password: await bcryptHelper.encryptPassword(value.password),
         };
         const userCreated = await User.createUser(newUser);
         if (!userCreated)
