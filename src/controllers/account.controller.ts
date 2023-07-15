@@ -9,7 +9,7 @@ import * as User from "../models/User";
 import {
     changePswSchema,
     forgetPswSchema,
-    recoverPswSchema,
+    emailItfipSchema,
 } from "../validation/schemas";
 
 export async function verifyJwtForRecoverPassword(
@@ -31,7 +31,7 @@ export async function sendJwtForRecoverPassword(
     req: Request,
     res: Response
 ): Promise<Response> {
-    const { error, value } = recoverPswSchema.validate(req.body);
+    const { error, value } = emailItfipSchema.validate(req.body);
     if (error) return res.status(400).json({ error: error.message });
 
     const userFound = await User.getUser(undefined, value.email);
@@ -43,7 +43,7 @@ export async function sendJwtForRecoverPassword(
         SECRET_KEY || "secretkey",
         { expiresIn: 10 * 60 }
     );
-    const resetPasswordLink = `${value.APP_ROUTE}/${token}`;
+    const resetPasswordLink = `${req.headers.origin}/${token}`;
     const msg = `Estimado usuario, hemos recibido una solicitud de cambio de contraseña para su cuenta. Si no ha sido usted, por favor ignore este correo electrónico.<br>Si es así, por favor ingrese al siguiente link para restablecer su contraseña:<br>${resetPasswordLink}<br><strong>Este link expirará en 10 minutos.</strong><br><br>Saludos, <br>Equipo ITFIP - RSystfip`;
 
     const linkSended = await sgHelper.sendEmail(
